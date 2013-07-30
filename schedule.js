@@ -33,11 +33,11 @@ var DD = function () {
     }
 
     return {
-        nextDD: function () { 
+        nextEvent: function () { 
             //set what we know
+            var rotationLengthInHours = sumValues(mapValueToArray(rotationEvents));
             var lastKnownDDInMsec = new Date("07/29/2013 18:00").getTime();
             var currentTimeInMsec = new Date().getTime();
-            var rotationLengthInHours = sumValues(mapValueToArray(rotationEvents));
 
             //calculate time since last known DD.
             var interval = currentTimeInMsec - lastKnownDDInMsec;
@@ -59,7 +59,19 @@ var DD = function () {
                 minutes = 0;
             }
             seconds = 60 -seconds;
-            return (hours + " hours, " + minutes + " minutes, " + seconds + " seconds.");
+
+            return {hours: hours, minutes: minutes, seconds: seconds};
+        },
+
+
+        updateDom: function () {
+            var nextEvent = this.nextEvent();
+            var ddDiv = document.getElementById("dd");
+            var ddSpans = ddDiv.getElementsByTagName("span");
+            for (spanId in ddSpans) {
+                var span = ddSpans[spanId];
+                span.innerHTML = nextEvent[span.className];
+            }
         }
     }
 }

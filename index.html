@@ -3,6 +3,12 @@
         <script src="schedule.js"></script>
     </head>
     <body>
-        Next Dungeon Delves in: <script text/javascript"> document.write( dd.nextDD() ); </script>
+        <div id="dd">
+            Next Dungeon Delves in: 
+            <span class="hours"></span> hours
+            <span class="minutes"></span> minutes
+            <span class="seconds"></span> seconds
+        </div>
+        <script text/javascript"> dd.updateDom(); </script>
     </body>
 </html>
