@@ -1,5 +1,5 @@
 var DD = function () {
-    var lastKnownDDInMsec = new Date("2013-07-29 18:00").getTime();
+    var lastKnownDDInMsec = new Date("07/29/2013 18:00").getTime();
     var hoursBetweenDDs = 6;
     var msecPerMinute = 1000 * 60;
     var msecPerHour = msecPerMinute * 60;
@@ -34,4 +34,3 @@ var DD = function () {
     }
 }
 var dd = new DD();
-console.log(dd.nextDD());
