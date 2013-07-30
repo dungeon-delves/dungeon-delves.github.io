@@ -61,7 +61,7 @@ var DD = function () {
             //calculate countdown
             var countdownMSec = targetHours * msecPerHour - elapsedInMSec;
             var hours = Math.floor(countdownMSec / msecPerHour);
-            var minutes = Math.floor((countdownMSec - (hours * msecPerHour)) / msecPerMinute);
+            var minutes = Math.ceil((countdownMSec - (hours * msecPerHour)) / msecPerMinute);
             var current = calculateCurrentEvent(hours, minutes, rotationLengthInHours);
 
             return {
