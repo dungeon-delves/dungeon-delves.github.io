@@ -2,7 +2,6 @@ var DD = function () {
     //come time-constants
     var msecPerMinute = 1000 * 60;
     var msecPerHour = msecPerMinute * 60;
-    var msecPerDay = msecPerHour * 24;
 
     //rotationEvents: map[eventname, duration]
     var rotationEvents = {};
@@ -35,7 +34,6 @@ var DD = function () {
     var calculateCurrentEvent = function(hours, minutes, rotationDuration) {
         var durationSum = rotationDuration;
         var toCompare = hours + (minutes/60);
-        console.log(toCompare);
         for (event in rotationEvents) {
             var duration = rotationEvents[event];
             durationSum -= duration;
@@ -54,30 +52,20 @@ var DD = function () {
             var currentTimeInMsec = new Date().getTime();
 
             //calculate time since last known DD.
-            var interval = currentTimeInMsec - lastKnownDDInMsec;
-            var elapsedInMSec = interval;
-            var hours = Math.floor(interval / msecPerHour );
-            interval = interval - (hours * msecPerHour );
-            var minutes = Math.floor(interval / msecPerMinute );
-            interval = interval - (minutes * msecPerMinute );
-            var seconds = Math.floor(interval / 1000 );
+            var elapsedInMSec = currentTimeInMsec - lastKnownDDInMsec;
 
             //calculate when the next DD should be
-            passedDDsSince = Math.floor(elapsedInMSec / (rotationLengthInHours*3600000));
+            passedDDsSince = Math.floor(elapsedInMSec / (rotationLengthInHours*msecPerHour));
             targetHours = (passedDDsSince + 1) * rotationLengthInHours;
 
             //calculate countdown
-            hours = targetHours - hours - 1;
-            minutes = 60 - minutes;
-            if (minutes === 60) {
-                hours = hours + 1;
-                minutes = 0;
-            }
-            seconds = 60 -seconds;
+            var countdownMSec = targetHours * msecPerHour - elapsedInMSec;
+            var hours = Math.floor(countdownMSec / msecPerHour);
+            var minutes = Math.floor((countdownMSec - (hours * msecPerHour)) / msecPerMinute);
             var current = calculateCurrentEvent(hours, minutes, rotationLengthInHours);
 
             return {
-                ddCountdown: {hours: hours, minutes: minutes, seconds: seconds},
+                ddCountdown: {hours: hours, minutes: minutes},
                 current: current
             }
         },
@@ -89,7 +77,8 @@ var DD = function () {
             var ddSpans = ddDiv.getElementsByTagName("span");
             for (spanId in ddSpans) {
                 var span = ddSpans[spanId];
-                span.innerHTML = nextEvent.ddCountdown[span.className];
+                var val = nextEvent.ddCountdown[span.className];
+                span.innerHTML = ((''+val).length < 2) ? '0'+val : val ;
             }
             var currentDiv = document.getElementById("current");
             var currentSpan = currentDiv.getElementsByTagName("span")[0];
