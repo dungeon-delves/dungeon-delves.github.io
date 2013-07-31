@@ -48,7 +48,7 @@ var DD = function () {
         nextEvent: function () { 
             //set what we know
             var rotationLengthInHours = sumValues(mapValueToArray(rotationEvents));
-            var lastKnownDDInMsec = new Date("07/29/2013 18:00").getTime();
+            var lastKnownDDInMsec = new Date("07/31/2013 10:00").getTime();
             var currentTimeInMsec = new Date().getTime();
 
             //calculate time since last known DD.
